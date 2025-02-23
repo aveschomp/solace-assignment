@@ -58,3 +58,15 @@ export const Tag: React.FC<ComponentProps> = ({ children, className }) => {
     </span>
   )
 }
+
+export const LoadingPlaceholder: React.FC = () => {
+  return (
+    <tbody>
+      <tr className="h-24">
+        <td colSpan={7} className="p-3 text-center text-gray-500 font-semibold align-middle">
+          Loading Advocates...
+        </td>
+      </tr>
+    </tbody>
+  );
+};

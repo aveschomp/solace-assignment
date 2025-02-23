@@ -2,19 +2,27 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Advocate } from './api/advocates/model'
-import { Table, TableCell, TableHeader, TableHeaderCell, TableRow, Tag } from './components';
+import { LoadingPlaceholder, Table, TableCell, TableHeader, TableHeaderCell, TableRow, Tag } from './components';
 
 export default function Home() {
   const [advocates, setAdvocates] = useState<Advocate[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    console.log("fetching advocates...");
-    fetch("/api/advocates").then((response) => {
-      response.json().then((jsonResponse) => {
+    const fetchAdvocates = async () => {
+      try {
+        const response = await fetch("/api/advocates");
+        const jsonResponse = await response.json();
         setAdvocates(jsonResponse.data);
-      });
-    });
+      } catch (error) {
+        console.error("Failed to fetch advocates:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAdvocates();
   }, []);
 
   const filteredAdvocates = useMemo(() => {
@@ -66,7 +74,8 @@ export default function Home() {
             <TableHeaderCell width="10%">Phone Number</TableHeaderCell>
           </tr>
         </TableHeader>
-        <tbody>
+        {loading ? <LoadingPlaceholder /> :
+          <tbody>
           {filteredAdvocates.map((advocate, index) => (
             <TableRow
               key={advocate.firstName}
@@ -85,6 +94,7 @@ export default function Home() {
             </TableRow>
           ))}
         </tbody>
+        }
       </Table>
     </main>
   );
