@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Advocate } from './api/advocates/model'
+import { Table, TableCell, TableHeader, TableHeaderCell, TableRow, Tag } from './components';
 
 export default function Home() {
   const [advocates, setAdvocates] = useState<Advocate[]>([]);
@@ -16,7 +17,7 @@ export default function Home() {
     });
   }, []);
 
-  const filteredAdvocates = useMemo(() =>  {
+  const filteredAdvocates = useMemo(() => {
     if (!searchTerm) return advocates;
     return advocates.filter((advocate) => {
       return (
@@ -45,38 +46,38 @@ export default function Home() {
       </div>
       <br />
       <br />
-      <table>
-      <thead>
-        <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>City</th>
-          <th>Degree</th>
-          <th>Specialties</th>
-          <th>Years of Experience</th>
-          <th>Phone Number</th>
-        </tr>
-      </thead>
+      <Table>
+        <TableHeader>
+          <tr>
+            <TableHeaderCell>First Name</TableHeaderCell>
+            <TableHeaderCell>Last Name</TableHeaderCell>
+            <TableHeaderCell>City</TableHeaderCell>
+            <TableHeaderCell>Degree</TableHeaderCell>
+            <TableHeaderCell>Specialties</TableHeaderCell>
+            <TableHeaderCell>Years of Experience</TableHeaderCell>
+            <TableHeaderCell>Phone Number</TableHeaderCell>
+          </tr>
+        </TableHeader>
         <tbody>
-          {filteredAdvocates.map((advocate, index) => {
-            return (
-              <tr key={`${advocate.lastName}-${index}`}>
-                <td>{advocate.firstName}</td>
-                <td>{advocate.lastName}</td>
-                <td>{advocate.city}</td>
-                <td>{advocate.degree}</td>
-                <td>
-                  {advocate.specialties.map((s) => (
-                    <div>{s}</div>
-                  ))}
-                </td>
-                <td>{advocate.yearsOfExperience}</td>
-                <td>{advocate.phoneNumber}</td>
-              </tr>
-            );
-          })}
+          {filteredAdvocates.map((advocate, index) => (
+            <TableRow
+              key={advocate.firstName}
+            >
+              <TableCell>{advocate.firstName}</TableCell>
+              <TableCell>{advocate.lastName}</TableCell>
+              <TableCell>{advocate.city}</TableCell>
+              <TableCell>{advocate.degree}</TableCell>
+              <TableCell>
+                {advocate.specialties.map((s, index) => (
+                  <Tag key={index}>{s}</Tag>
+                ))}
+              </TableCell>
+              <TableCell>{advocate.yearsOfExperience}</TableCell>
+              <TableCell>{advocate.phoneNumber}</TableCell>
+            </TableRow>
+          ))}
         </tbody>
-      </table>
+      </Table>
     </main>
   );
 }
