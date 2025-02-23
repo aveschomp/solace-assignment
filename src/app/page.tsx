@@ -19,14 +19,16 @@ export default function Home() {
 
   const filteredAdvocates = useMemo(() => {
     if (!searchTerm) return advocates;
+    const loweredTerm = searchTerm.toLowerCase();
     return advocates.filter((advocate) => {
       return (
-        advocate.firstName.includes(searchTerm) ||
-        advocate.lastName.includes(searchTerm) ||
-        advocate.city.includes(searchTerm) ||
-        advocate.degree.includes(searchTerm) ||
-        advocate.specialties.includes(searchTerm) ||
-        advocate.yearsOfExperience === parseInt(searchTerm)
+        advocate.firstName.toLowerCase().includes(loweredTerm) ||
+        advocate.lastName.toLowerCase().includes(loweredTerm) ||
+        advocate.city.toLowerCase().includes(loweredTerm) ||
+        advocate.degree.toLowerCase().includes(loweredTerm) ||
+        advocate.specialties.some((specialty) => specialty.toLowerCase().includes(loweredTerm)) ||
+        advocate.yearsOfExperience === parseInt(loweredTerm) ||
+        advocate.phoneNumber.toString().includes(loweredTerm)
       );
     });
   }, [advocates, searchTerm])
@@ -36,26 +38,32 @@ export default function Home() {
       <h1>Solace Advocates</h1>
       <br />
       <br />
-      <div>
-        <p>Search</p>
-        <p>
-          Searching for:
-        </p>
-        <input style={{ border: "1px solid black" }} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-        <button onClick={() => setSearchTerm('')}>Reset Search</button>
+      <div className="flex flex-col sm:flex-row items-center gap-2 pb-4">
+        <input
+          id="search"
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Type to search..."
+          className="w-full sm:w-64 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <button
+          onClick={() => setSearchTerm('')}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+        >
+          Reset
+        </button>
       </div>
-      <br />
-      <br />
       <Table>
         <TableHeader>
           <tr>
-            <TableHeaderCell>First Name</TableHeaderCell>
-            <TableHeaderCell>Last Name</TableHeaderCell>
-            <TableHeaderCell>City</TableHeaderCell>
-            <TableHeaderCell>Degree</TableHeaderCell>
-            <TableHeaderCell>Specialties</TableHeaderCell>
-            <TableHeaderCell>Years of Experience</TableHeaderCell>
-            <TableHeaderCell>Phone Number</TableHeaderCell>
+            <TableHeaderCell width="10%">First Name</TableHeaderCell>
+            <TableHeaderCell width="10%">Last Name</TableHeaderCell>
+            <TableHeaderCell width="10%">City</TableHeaderCell>
+            <TableHeaderCell width="5%">Degree</TableHeaderCell>
+            <TableHeaderCell width="45%">Specialties</TableHeaderCell>
+            <TableHeaderCell width="10%">Years of Experience</TableHeaderCell>
+            <TableHeaderCell width="10%">Phone Number</TableHeaderCell>
           </tr>
         </TableHeader>
         <tbody>
