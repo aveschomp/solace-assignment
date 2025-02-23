@@ -23,9 +23,13 @@ export const TableHeader: React.FC<ComponentProps> = ({ children, className }) =
   );
 };
 
-export const TableHeaderCell: React.FC<ComponentProps> = ({ children, className }) => {
+interface TableHeaderCellProps extends ComponentProps {
+  width?: string;
+}
+
+export const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ children, className, width }) => {
   return (
-    <th className={`p-3 border border-gray-300 bg-gray-200 text-gray-700 font-semibold ${className}`}>
+    <th style={{ width }} className={`p-3 border border-gray-300 bg-gray-200 text-gray-700 font-semibold ${className}`}>
       {children}
     </th>
   );
